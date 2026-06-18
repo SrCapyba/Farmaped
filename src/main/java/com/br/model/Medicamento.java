@@ -44,5 +44,29 @@ public class Medicamento {
 
     public boolean isControlado() {
         return controlado;
+
+    }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
+
+    public void setControlado(boolean controlado) {
+        this.controlado = controlado;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "ID: %d | Nome: %s | Preço: R$ %.2f | Estoque: %d | Controlado: %s",
+                id,
+                nome,
+                preco,
+                quantidadeEstoque,
+                controlado ? "Sim" : "Não"
+        );
     }
 }
