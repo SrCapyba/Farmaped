@@ -9,10 +9,12 @@ public class MenuMedicamentos {
 
     private final Scanner scanner;
     private final MedicamentoController medicamentoController;
+    private final BuscaMedicamento buscaMedicamento;
 
     public MenuMedicamentos(MedicamentoController medicamentoController) {
         this.scanner = new Scanner(System.in);
         this.medicamentoController = medicamentoController;
+        this.buscaMedicamento = new BuscaMedicamento(medicamentoController.listarTodos());
     }
 
     public void iniciar() {
@@ -27,6 +29,7 @@ public class MenuMedicamentos {
             System.out.println("3 - Buscar medicamento por ID");
             System.out.println("4 - Atualizar medicamento");
             System.out.println("5 - Remover medicamento");
+            System.out.println("6 - Busca avançada de medicamentos"); // NOVO
             System.out.println("0 - Voltar");
             System.out.println("==============================");
             System.out.print("Escolha: ");
@@ -48,6 +51,9 @@ public class MenuMedicamentos {
                     break;
                 case 5:
                     remover();
+                    break;
+                case 6:
+                    buscaAvancada(); // NOVO
                     break;
                 case 0:
                     System.out.println("Voltando...");
@@ -116,6 +122,43 @@ public class MenuMedicamentos {
         }
 
         System.out.println(medicamento);
+    }
+
+    // NOVO: Busca avançada de medicamentos
+    private void buscaAvancada() {
+        System.out.println("\n===== BUSCA AVANÇADA DE MEDICAMENTOS =====");
+        System.out.println("Deixe em branco para ignorar o filtro.");
+
+        System.out.print("Nome: ");
+        String nome = scanner.nextLine();
+
+        System.out.print("Categoria: ");
+        String categoria = scanner.nextLine();
+
+        System.out.print("Preço mínimo: ");
+        String precoMinStr = scanner.nextLine();
+        double precoMin = precoMinStr.isEmpty() ? 0 : Double.parseDouble(precoMinStr.replace(",", "."));
+
+        System.out.print("Preço máximo: ");
+        String precoMaxStr = scanner.nextLine();
+        double precoMax = precoMaxStr.isEmpty() ? Double.MAX_VALUE : Double.parseDouble(precoMaxStr.replace(",", "."));
+
+        System.out.print("Filtrar por controlado? (s/n): ");
+        boolean controlado = scanner.nextLine().equalsIgnoreCase("s");
+
+        List<Medicamento> resultados = buscaMedicamento.buscaCombinada(
+                nome, categoria, precoMin, precoMax, controlado
+        );
+
+        if (resultados.isEmpty()) {
+            System.out.println("Nenhum medicamento encontrado.");
+            return;
+        }
+
+        System.out.println("\n===== RESULTADOS (" + resultados.size() + ") =====");
+        for (Medicamento m : resultados) {
+            System.out.println(m);
+        }
     }
 
     private void atualizar() {

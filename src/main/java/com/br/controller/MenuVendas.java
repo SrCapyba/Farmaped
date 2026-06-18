@@ -121,7 +121,8 @@ public class MenuVendas {
 
             System.out.print("Receita apresentada? (s/n): ");
 
-            String resposta = scanner.next();
+            // CORRIGIDO: usar nextLine() em vez de next()
+            String resposta = scanner.nextLine();
 
             receita = resposta.equalsIgnoreCase("s");
         }
@@ -167,10 +168,10 @@ public class MenuVendas {
         Cliente cliente = clientes.get(indice);
 
         System.out.print("Desconto: ");
-        double desconto = scanner.nextDouble();
+        // CORRIGIDO: usar lerDouble() em vez de scanner.nextDouble()
+        double desconto = lerDouble();
 
         System.out.print("Forma de pagamento: ");
-        scanner.nextLine();
         String formaPagamento = scanner.nextLine();
 
         vendaController.efetuarVenda(
@@ -214,14 +215,27 @@ public class MenuVendas {
         return null;
     }
 
+    // CORRIGIDO: Método lerInteiro melhorado
     private int lerInteiro() {
-
-        while (!scanner.hasNextInt()) {
-
-            System.out.println("Digite um número válido.");
-            scanner.next();
+        while (true) {
+            try {
+                String entrada = scanner.nextLine();
+                return Integer.parseInt(entrada.trim());
+            } catch (NumberFormatException e) {
+                System.out.print("Digite um número válido: ");
+            }
         }
+    }
 
-        return scanner.nextInt();
+    // NOVO: Método para ler double corretamente
+    private double lerDouble() {
+        while (true) {
+            try {
+                String entrada = scanner.nextLine().replace(",", ".");
+                return Double.parseDouble(entrada.trim());
+            } catch (NumberFormatException e) {
+                System.out.print("Digite um valor válido: ");
+            }
+        }
     }
 }

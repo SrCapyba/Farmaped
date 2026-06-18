@@ -201,6 +201,7 @@ public class MenuClientes {
         }
     }
 
+    // CORRIGIDO: Método atualizar com data de nascimento
     private void atualizar() {
         System.out.print("CPF do cliente: ");
         String cpf = scanner.nextLine();
@@ -228,6 +229,18 @@ public class MenuClientes {
         System.out.print("Idade [" + cliente.getIdade() + "]: ");
         String idadeStr = scanner.nextLine();
         int idade = idadeStr.isEmpty() ? cliente.getIdade() : Integer.parseInt(idadeStr);
+
+        // CORRIGIDO: Adicionando data de nascimento
+        System.out.print("Data de Nascimento [" + cliente.getDataNascimento() + "]: ");
+        String dataStr = scanner.nextLine();
+        LocalDate dataNascimento = cliente.getDataNascimento();
+        if (!dataStr.isEmpty()) {
+            try {
+                dataNascimento = LocalDate.parse(dataStr, formatter);
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato inválido! Mantendo data atual.");
+            }
+        }
 
         System.out.print("Telefone [" + cliente.getTelefone() + "]: ");
         String telefone = scanner.nextLine();
@@ -261,9 +274,11 @@ public class MenuClientes {
         String cep = scanner.nextLine();
         if (cep.isEmpty()) cep = cliente.getCep();
 
+        // CORRIGIDO: Passando a data de nascimento atualizada
         boolean atualizado = clienteController.atualizar(
                 cliente.getId(), nome, sexo, idade, cliente.getCpf(),
-                cliente.getDataNascimento(), telefone, estado, cidade,
+                dataNascimento, // <- DATA ATUALIZADA
+                telefone, estado, cidade,
                 bairro, logradouro, numero, cep, email,
                 cliente.getNomeAlergia(), cliente.getNomeRemedioControlado()
         );
