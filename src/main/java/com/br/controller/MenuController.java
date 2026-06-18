@@ -7,6 +7,7 @@ import com.br.interfaces.Menu;
 import com.br.model.Cliente;
 import com.br.model.Medicamento;
 import com.br.repository.VendaRepository;
+import com.br.repository.MedicamentoRepository;
 
 public class MenuController implements Menu {
 
@@ -91,7 +92,16 @@ public class MenuController implements Menu {
 
     @Override
     public void goMedicamentos() {
-        System.out.println("\n[MÓDULO MEDICAMENTOS]");
+        MedicamentoRepository medicamentoRepository =
+                new MedicamentoRepository(medicamentos);
+
+        MedicamentoController medicamentoController =
+                new MedicamentoController(medicamentoRepository);
+
+        MenuMedicamentos menuMedicamentos =
+                new MenuMedicamentos(medicamentoController);
+
+        menuMedicamentos.iniciar();
     }
 
     @Override
